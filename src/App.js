@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { createContext, useState } from "react";
+import ListOfMovies from "./components/ListOfMovies";
+import { createTheme, ThemeProvider } from "@material-ui/core";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
-function App() {
+export const ThemeContext = createContext();
+
+export default function App() {
+  const [dark, setDark] = useState(false);
+
+  const handleMode = () => {
+    setDark(!dark);
+  };
+
+  const theme = createTheme({
+    palette: {
+      type: dark ? "dark" : "light",
+      background: {
+        default: dark ? "#222222" : "#FFFFFF",
+      },
+    },
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeContext.Provider value={{ dark, handleMode }}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <ListOfMovies />
+      </ThemeProvider>
+    </ThemeContext.Provider>
   );
 }
-
-export default App;
